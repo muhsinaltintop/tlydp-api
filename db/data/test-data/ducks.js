@@ -2,7 +2,7 @@ module.exports = [
   {
     duck_name: "Lou",
     maker_id: 5,
-    finder_id: 5,
+    finder_id: 2,
     location_placed_lat: 24.629264,
     location_placed_lng: 118.041444,
     location_found_lat: -7.280135,
@@ -27,8 +27,8 @@ module.exports = [
   },
   {
     duck_name: "Stefanie",
-    maker_id: 5,
-    finder_id: 3,
+    maker_id: 3,
+    finder_id: 5,
     location_placed_lat: -14.5205297,
     location_placed_lng: -75.2019585,
     location_found_lat: 38.7894166,
@@ -40,7 +40,7 @@ module.exports = [
   },
   {
     duck_name: "Corly",
-    maker_id: 5,
+    maker_id: 2,
     finder_id: 3,
     location_placed_lat: 29.270311,
     location_placed_lng: 88.880492,
@@ -66,7 +66,7 @@ module.exports = [
   {
     duck_name: "Dulciana",
     maker_id: 5,
-    finder_id: 5,
+    finder_id: 1,
     location_placed_lat: 49.9248455,
     location_placed_lng: 116.8425182,
     location_found_lat: 25.60162,
@@ -142,7 +142,7 @@ module.exports = [
   {
     duck_name: "Nada",
     maker_id: 1,
-    finder_id: 1,
+    finder_id: 4,
     location_placed_lat: 48.8579687,
     location_placed_lng: 2.5764306,
     location_found_lat: 30.572815,
@@ -168,7 +168,7 @@ module.exports = [
   {
     duck_name: "Billi",
     maker_id: 1,
-    finder_id: 1,
+    finder_id: 5,
     location_placed_lat: -7.2652612,
     location_placed_lng: 109.3575011,
     location_found_lat: 31.775967,
@@ -219,7 +219,7 @@ module.exports = [
   {
     duck_name: "Gena",
     maker_id: 2,
-    finder_id: 1,
+    finder_id: 3,
     location_placed_lat: 15.2931866,
     location_placed_lng: -90.1147496,
     location_found_lat: 7.198851,
@@ -258,7 +258,7 @@ module.exports = [
   {
     duck_name: "Roxane",
     maker_id: 3,
-    finder_id: 3,
+    finder_id: 1,
     location_placed_lat: -6.8243672,
     location_placed_lng: 110.7880536,
     location_found_lat: -7.2376196,
@@ -296,7 +296,7 @@ module.exports = [
   {
     duck_name: "Daphna",
     maker_id: 2,
-    finder_id: 2,
+    finder_id: 5,
     location_placed_lat: 53.2067339,
     location_placed_lng: 22.166847,
     location_found_lat: 17.5358596,
@@ -321,7 +321,7 @@ module.exports = [
   {
     duck_name: "Lana",
     maker_id: 1,
-    finder_id: 1,
+    finder_id: 4,
     location_placed_lat: 39.585229,
     location_placed_lng: 117.238073,
     location_found_lat: 31.753884,
@@ -334,7 +334,7 @@ module.exports = [
   {
     duck_name: "Tootsie",
     maker_id: 3,
-    finder_id: 3,
+    finder_id: 2,
     location_placed_lat: 20.8965838,
     location_placed_lng: -105.4093552,
     location_found_lat: -23.4849456,
