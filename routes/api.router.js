@@ -1,6 +1,6 @@
 const express = require("express");
-const ducksRouter = require("./ducks-router");
-const usersRouter = require("./users-router");
+const ducksRouter = require("./ducks.router");
+const usersRouter = require("./users.router");
 
 const apiRouter = express.Router();
 
