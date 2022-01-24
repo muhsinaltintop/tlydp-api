@@ -3,7 +3,6 @@ const format = require("pg-format");
 
 const seed = (data) => {
   const { duckData, userData } = data;
-  console.log("In seed");
   return db
     .query("DROP TABLE IF EXISTS ducks")
     .then(() => {
@@ -51,8 +50,14 @@ const seed = (data) => {
         ];
       });
       const usersQuery = format(
-        `INSERT INTO users (user_name, first_name, last_name, password, email, profile_pic)
-        VALUES %L RETURNING *;`,
+        `INSERT INTO users 
+        (user_name, 
+        first_name, 
+        last_name, 
+        password, 
+        email, 
+        profile_pic)
+        VALUES %L;`,
         formattedUsers
       );
       return db.query(usersQuery);
@@ -84,7 +89,7 @@ const seed = (data) => {
         clue,
         image,
         comments)
-        VALUES %L RETURNING *;`,
+        VALUES %L;`,
         formattedDucks
       );
       return db.query(ducksQuery);
