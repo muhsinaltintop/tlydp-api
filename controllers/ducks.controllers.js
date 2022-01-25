@@ -3,6 +3,7 @@ const {
   selectFoundDucks,
   selectUnfoundDucks,
   selectDuckById,
+  updateDuckById,
 } = require("../models/ducks.models");
 
 exports.getDucks = async (req, res, next) => {
@@ -31,6 +32,16 @@ exports.getDuckById = async (req, res, next) => {
   const { duck_id } = req.params;
 
   const duck = await selectDuckById(duck_id);
+
+  res.status(200).send({ duck });
+};
+
+exports.patchDuckById = async (req, res, next) => {
+  const { duck_id } = req.params;
+  
+  const body = req.body;
+
+  const duck = await updateDuckById(duck_id, body);
 
   res.status(200).send({ duck });
 };
