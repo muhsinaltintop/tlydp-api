@@ -2,6 +2,7 @@ const {
   selectDucks,
   selectFoundDucks,
   selectUnfoundDucks,
+  selectDuckById,
 } = require("../models/ducks.models");
 
 exports.getDucks = async (req, res, next) => {
@@ -24,4 +25,12 @@ exports.getUnfoundDucks = async (req, res, next) => {
   const ducks = await selectUnfoundDucks();
 
   res.status(200).send({ ducks });
+};
+
+exports.getDuckById = async (req, res, next) => {
+  const { duck_id } = req.params;
+
+  const duck = await selectDuckById(duck_id);
+
+  res.status(200).send({ duck });
 };
