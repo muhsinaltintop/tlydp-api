@@ -7,7 +7,7 @@ const app = require("../app");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe.only("GET /api/ducks", () => {
+describe("GET /api/ducks", () => {
   test("200: returns array of all ducks with all properties", async () => {
     const {
       body: { ducks },
@@ -127,7 +127,7 @@ describe("GET /api/ducks/unfound", () => {
           location_placed_lat: expect.any(Number),
           location_placed_lng: expect.any(Number),
           clue: expect.any(String),
-          user_name: expect.any(String),
+          maker_name: expect.any(String),
         })
       );
     });
