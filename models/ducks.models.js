@@ -44,3 +44,30 @@ exports.selectDuckById = async (id) => {
 
   return rows[0];
 };
+
+exports.updateDuckById = async (
+  duck_id,
+  { finder_id, location_found_lat, location_found_lng, image, comments }
+) => {
+  const { rows } = await db.query(
+    `
+  UPDATE ducks
+  SET finder_id = $1,
+      location_found_lat = $2,
+      location_found_lng = $3,
+      image = $4,
+      comments = $5
+  WHERE duck_id = $6
+  RETURNING *;`,
+    [
+      finder_id,
+      location_found_lat,
+      location_found_lng,
+      image,
+      comments,
+      duck_id,
+    ]
+  );
+
+  return rows[0];
+};
