@@ -15,15 +15,25 @@ exports.selectDucks = async (maker_id) => {
   return rows;
 };
 
-exports.selectFoundDucks = async (finder_id) => {
-  const queryStr = `
+exports.selectFoundDucks = async (finder_id, maker_id) => {
+  let queryStr = `
   SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
   FROM ducks
   JOIN users AS makers ON ducks.maker_id = makers.user_id
-  JOIN users AS finders ON ducks.finder_id = finders.user_id
-  WHERE finder_id ${finder_id ? "= $1" : "IS NOT NULL"};`;
+  JOIN users AS finders ON ducks.finder_id = finders.user_id `;
 
-  const queryValues = finder_id ? [finder_id] : null;
+  const queryValues = [];
+
+  if (finder_id) {
+    queryStr += `WHERE finder_id = $1;`;
+    queryValues.push(finder_id);
+  } else if (maker_id) {
+    queryStr += `WHERE finder_id IS NOT NULL
+    AND maker_id = $1;`;
+    queryValues.push(maker_id);
+  } else {
+    queryStr += `WHERE finder_id IS NOT NULL;`;
+  }
 
   const { rows } = await db.query(queryStr, queryValues);
 
