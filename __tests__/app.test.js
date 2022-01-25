@@ -57,6 +57,19 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
+  test("200: returns array of only ducks found by a user when passed a finder_id query", async () => {
+    const {
+      body: { ducks },
+    } = await request(app).get("/api/ducks/found?finder_id=3").expect(200);
+    expect(ducks).toHaveLength(7);
+    ducks.forEach((duck) => {
+      expect(duck).toEqual(
+        expect.objectContaining({
+          finder_id: 3,
+        })
+      );
+    });
+  });
 });
 
 describe("GET /api/ducks/unfound", () => {
