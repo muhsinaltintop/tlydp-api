@@ -5,12 +5,9 @@ const {
 } = require("../models/ducks.models");
 
 exports.getDucks = async (req, res, next) => {
-  const ducks = await selectDucks();
+  const { maker_id } = req.query;
 
-  //finder query
-  //maker query
-  //found
-  //unfound
+  const ducks = await selectDucks(maker_id);
 
   res.status(200).send({ ducks });
 };
