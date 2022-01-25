@@ -111,6 +111,21 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
+  test("200: returns array of only found ducks made by a user when passed a maker_id query", async () => {
+    const {
+      body: { ducks },
+    } = await request(app).get("/api/ducks/found?maker_id=5").expect(200);
+    expect(ducks).toHaveLength(5);
+    ducks.forEach((duck) => {
+      expect(duck).toEqual(
+        expect.objectContaining({
+          maker_id: 5,
+          maker_name: "aeastridge4",
+          finder_id: expect.any(Number),
+        })
+      );
+    });
+  });
 });
 
 describe("GET /api/ducks/unfound", () => {
