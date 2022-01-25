@@ -145,6 +145,8 @@ describe("GET /api/ducks/:duck_id", () => {
         duck_name: "Stefanie",
         maker_id: 3,
         finder_id: 5,
+        maker_name: "jbuggy2",
+        finder_name: "aeastridge4",
         location_placed_lat: -14.5205297,
         location_placed_lng: -75.2019585,
         location_found_lat: 38.7894166,
@@ -196,7 +198,7 @@ describe("POST /api/ducks", () => {
       maker_id: 2,
       location_placed_lat: 53.488087,
       location_placed_lng: -10.022186,
-      clue: "Find me ",
+      clue: "Find me",
     };
 
     const {
@@ -211,7 +213,7 @@ describe("POST /api/ducks", () => {
         location_placed_lng: -10.022186,
         location_found_lat: null,
         location_found_lng: null,
-        clue: "Find me ",
+        clue: "Find me",
         image: null,
         comments: null,
       })
