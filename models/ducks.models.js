@@ -33,3 +33,14 @@ exports.selectUnfoundDucks = async () => {
 
   return rows;
 };
+
+exports.selectDuckById = async (id) => {
+  const { rows } = await db.query(
+    `
+  SELECT * FROM ducks
+  WHERE duck_id = $1;`,
+    [id]
+  );
+
+  return rows[0];
+};
