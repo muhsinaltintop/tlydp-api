@@ -2,13 +2,16 @@ const db = require("../db/connection");
 
 exports.selectDucks = async (maker_id) => {
   const queryStr = `
-  SELECT * FROM ducks
+  SELECT ducks.*, maker.user_name AS maker_name, finder.user_name AS finder_name
+  FROM ducks
+  JOIN users AS maker ON ducks.maker_id = maker.user_id
+  LEFT JOIN users AS finder ON ducks.finder_id = finder.user_id
   ${maker_id ? "WHERE maker_id = $1" : ""};`;
 
   const queryValues = maker_id ? [maker_id] : null;
 
   const { rows } = await db.query(queryStr, queryValues);
-
+  console.log(rows);
   return rows;
 };
 
