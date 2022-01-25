@@ -58,3 +58,24 @@ describe("GET /api/ducks/found", () => {
     });
   });
 });
+
+describe("GET /api/ducks/unfound", () => {
+  test("200: returns array of all unfound ducks ", async () => {
+    const {
+      body: { ducks },
+    } = await request(app).get("/api/ducks/unfound").expect(200);
+    expect(ducks).toHaveLength(4);
+    ducks.forEach((duck) => {
+      expect(duck).toEqual(
+        expect.objectContaining({
+          duck_name: expect.any(String),
+          finder_id: null,
+          location_placed_lat: expect.any(Number),
+          location_placed_lng: expect.any(Number),
+          clue: expect.any(String),
+          user_name: expect.any(String),
+        })
+      );
+    });
+  });
+});
