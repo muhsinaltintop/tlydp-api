@@ -4,8 +4,8 @@ exports.selectDucks = async (maker_id) => {
   const queryStr = `
   SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
   FROM ducks
-  JOIN users AS makers ON ducks.maker_id = maker.user_id
-  LEFT JOIN users AS finders ON ducks.finder_id = finder.user_id
+  JOIN users AS makers ON ducks.maker_id = makers.user_id
+  LEFT JOIN users AS finders ON ducks.finder_id = finders.user_id
   ${maker_id ? "WHERE maker_id = $1" : ""};`;
 
   const queryValues = maker_id ? [maker_id] : null;
@@ -19,8 +19,8 @@ exports.selectFoundDucks = async (finder_id) => {
   const queryStr = `
   SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
   FROM ducks
-  JOIN users AS makers ON ducks.maker_id = maker.user_id
-  JOIN users AS finders ON ducks.finder_id = finder.user_id
+  JOIN users AS makers ON ducks.maker_id = makers.user_id
+  JOIN users AS finders ON ducks.finder_id = finders.user_id
   WHERE finder_id ${finder_id ? "= $1" : "IS NOT NULL"};`;
 
   const queryValues = finder_id ? [finder_id] : null;
@@ -43,7 +43,10 @@ exports.selectUnfoundDucks = async () => {
 exports.selectDuckById = async (id) => {
   const { rows } = await db.query(
     `
-  SELECT * FROM ducks
+  SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
+  FROM ducks
+  JOIN users AS makers ON ducks.maker_id = makers.user_id
+  LEFT JOIN users AS finders ON ducks.finder_id = finders.user_id
   WHERE duck_id = $1;`,
     [id]
   );
