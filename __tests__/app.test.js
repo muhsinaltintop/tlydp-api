@@ -32,3 +32,29 @@ describe("GET /api/ducks", () => {
     });
   });
 });
+
+describe("GET /api/ducks/found", () => {
+  test("200: returns array of only ducks that have been found", async () => {
+    const {
+      body: { ducks },
+    } = await request(app).get("/api/ducks/found").expect(200);
+    expect(ducks).toHaveLength(26);
+    ducks.forEach((duck) => {
+      expect(duck).toEqual(
+        expect.objectContaining({
+          duck_id: expect.any(Number),
+          duck_name: expect.any(String),
+          maker_id: expect.any(Number),
+          finder_id: expect.any(Number),
+          location_placed_lat: expect.any(Number),
+          location_placed_lng: expect.any(Number),
+          location_found_lat: expect.any(Number),
+          location_found_lng: expect.any(Number),
+          clue: expect.any(String),
+          image: expect.any(String),
+          comments: expect.any(String),
+        })
+      );
+    });
+  });
+});
