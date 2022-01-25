@@ -4,6 +4,7 @@ const {
   selectUnfoundDucks,
   selectDuckById,
   updateDuckById,
+  insertDuck,
 } = require("../models/ducks.models");
 
 exports.getDucks = async (req, res, next) => {
@@ -38,10 +39,18 @@ exports.getDuckById = async (req, res, next) => {
 
 exports.patchDuckById = async (req, res, next) => {
   const { duck_id } = req.params;
-  
+
   const body = req.body;
 
   const duck = await updateDuckById(duck_id, body);
 
   res.status(200).send({ duck });
+};
+
+exports.postDuck = async (req, res, next) => {
+  const body = req.body;
+
+  const duck = await insertDuck(body);
+
+  res.status(201).send({ duck });
 };
