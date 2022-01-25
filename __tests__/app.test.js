@@ -150,7 +150,7 @@ describe("GET /api/ducks/unfound", () => {
 });
 
 describe("GET /api/ducks/:duck_id", () => {
-  test("200: should return a single duck object with the correct ID", async () => {
+  test("200: returns a single duck object with the correct ID", async () => {
     const {
       body: { duck },
     } = await request(app).get("/api/ducks/3").expect(200);
@@ -193,6 +193,8 @@ describe("PATCH /api/ducks/:duck_id", () => {
         duck_name: "Kristan",
         maker_id: 2,
         finder_id: 3,
+        maker_name: "bmcgenis1",
+        finder_name: "jbuggy2",
         location_placed_lat: 53.488087,
         location_placed_lng: -10.022186,
         location_found_lat: 38.7894166,
@@ -207,7 +209,7 @@ describe("PATCH /api/ducks/:duck_id", () => {
 });
 
 describe("POST /api/ducks", () => {
-  test("201: should return created duck", async () => {
+  test("201: returns created duck object", async () => {
     const newDuck = {
       duck_name: "Quacky",
       maker_id: 2,
