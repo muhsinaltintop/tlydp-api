@@ -16,7 +16,9 @@ exports.getDucks = async (req, res, next) => {
 };
 
 exports.getFoundDucks = async (req, res, next) => {
-  const ducks = await selectFoundDucks();
+  const { finder_id } = req.query;
+
+  const ducks = await selectFoundDucks(finder_id);
 
   res.status(200).send({ ducks });
 };
