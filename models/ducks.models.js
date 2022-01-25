@@ -14,7 +14,10 @@ exports.selectDucks = async (maker_id) => {
 
 exports.selectFoundDucks = async (finder_id) => {
   const queryStr = `
-  SELECT * FROM ducks
+  SELECT ducks.*, maker.user_name AS maker_name, finder.user_name AS finder_name
+  FROM ducks
+  JOIN users AS maker ON ducks.maker_id = maker.user_id
+  JOIN users AS finder ON ducks.finder_id = finder.user_id
   WHERE finder_id ${finder_id ? "= $1" : "IS NOT NULL"};`;
 
   const queryValues = finder_id ? [finder_id] : null;
