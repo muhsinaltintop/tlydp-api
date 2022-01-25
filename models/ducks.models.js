@@ -1,8 +1,13 @@
 const db = require("../db/connection");
 
-exports.selectDucks = async () => {
-  const { rows } = await db.query(`
-  SELECT * FROM ducks;`);
+exports.selectDucks = async (maker_id) => {
+  const queryStr = `
+  SELECT * FROM ducks
+  ${maker_id ? "WHERE maker_id = $1" : ""};`;
+
+  const queryValues = maker_id ? [maker_id] : null;
+
+  const { rows } = await db.query(queryStr, queryValues);
 
   return rows;
 };
@@ -15,7 +20,7 @@ exports.selectFoundDucks = async (finder_id) => {
   const queryValues = finder_id ? [finder_id] : null;
 
   const { rows } = await db.query(queryStr, queryValues);
-  
+
   return rows;
 };
 
