@@ -1,9 +1,9 @@
 const express = require("express");
-const { getDucks, getFoundDucks, getUnfoundDucks, getDuckById, patchDuckById } = require("../controllers/ducks.controllers");
+const { getDucks, getFoundDucks, getUnfoundDucks, getDuckById, patchDuckById, postDuck } = require("../controllers/ducks.controllers");
 
 const ducksRouter = express.Router();
 
-ducksRouter.route("/").get(getDucks);
+ducksRouter.route("/").get(getDucks).post(postDuck);
 
 ducksRouter.route("/found").get(getFoundDucks);
 
