@@ -7,7 +7,7 @@ const app = require("../app");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe("GET /api/ducks", () => {
+describe.only("GET /api/ducks", () => {
   test("200: returns array of all ducks with all properties", async () => {
     const {
       body: { ducks },
@@ -20,6 +20,8 @@ describe("GET /api/ducks", () => {
           duck_name: expect.any(String),
           maker_id: expect.any(Number),
           finder_id: expect.toBeTypeOrNull("number"),
+          maker_name: expect.any(String),
+          finder_name: expect.toBeTypeOrNull("string"),
           location_placed_lat: expect.any(Number),
           location_placed_lng: expect.any(Number),
           location_found_lat: expect.toBeTypeOrNull("number"),
@@ -43,6 +45,8 @@ describe("GET /api/ducks", () => {
           duck_name: expect.any(String),
           maker_id: 2,
           finder_id: expect.toBeTypeOrNull("number"),
+          maker_name: expect.any(String),
+          finder_name: expect.toBeTypeOrNull("string"),
           location_placed_lat: expect.any(Number),
           location_placed_lng: expect.any(Number),
           location_found_lat: expect.toBeTypeOrNull("number"),
@@ -82,7 +86,7 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
-  test.only("200: returns array of only ducks found by a user when passed a finder_id query", async () => {
+  test("200: returns array of only ducks found by a user when passed a finder_id query", async () => {
     const {
       body: { ducks },
     } = await request(app).get("/api/ducks/found?finder_id=3").expect(200);
