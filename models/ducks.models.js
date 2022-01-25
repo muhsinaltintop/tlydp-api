@@ -71,3 +71,22 @@ exports.updateDuckById = async (
 
   return rows[0];
 };
+
+exports.insertDuck = async ({
+  duck_name,
+  maker_id,
+  location_placed_lat,
+  location_placed_lng,
+  clue,
+}) => {
+  const { rows } = await db.query(
+    `
+  INSERT INTO ducks
+  (duck_name, maker_id, location_placed_lat, location_placed_lng, clue)
+  VALUES ($1, $2, $3, $4, $5)
+  RETURNING *;`,
+    [duck_name, maker_id, location_placed_lat, location_placed_lng, clue]
+  );
+
+  return rows[0];
+};
