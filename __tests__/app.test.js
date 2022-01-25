@@ -125,3 +125,27 @@ describe("GET /api/ducks/unfound", () => {
     });
   });
 });
+
+describe("GET /api/ducks/:duck_id", () => {
+  test("200: should return a single duck object with the correct ID", async () => {
+    const {
+      body: { duck },
+    } = await request(app).get("/api/ducks/3").expect(200);
+    expect(duck).toEqual(
+      expect.objectContaining({
+        duck_id: 3,
+        duck_name: "Stefanie",
+        maker_id: 3,
+        finder_id: 5,
+        location_placed_lat: -14.5205297,
+        location_placed_lng: -75.2019585,
+        location_found_lat: 38.7894166,
+        location_found_lng: -9.2036136,
+        clue: "mauris morbi non lectus aliquam sit amet diam in magna",
+        image: "http://dummyimage.com/217x100.png/ff4444/ffffff",
+        comments:
+          "nulla neque libero convallis eget eleifend luctus ultricies eu nibh quisque id justo",
+      })
+    );
+  });
+});
