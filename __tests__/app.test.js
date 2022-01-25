@@ -149,3 +149,34 @@ describe("GET /api/ducks/:duck_id", () => {
     );
   });
 });
+
+describe("PATCH /api/ducks/:duck_id", () => {
+  test("200: returns updated duck object with new values", async () => {
+    const foundDuck = {
+      finder_id: 3,
+      location_found_lat: 38.7894166,
+      location_found_lng: 7.986,
+      image:
+        "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+      comments: "I found a duck",
+    };
+    const {
+      body: { duck },
+    } = await request(app).patch("/api/ducks/5").send(foundDuck).expect(200);
+    expect(duck).toEqual(
+      expect.objectContaining({
+        duck_name: "Kristan",
+        maker_id: 2,
+        finder_id: 3,
+        location_placed_lat: 53.488087,
+        location_placed_lng: -10.022186,
+        location_found_lat: 38.7894166,
+        location_found_lng: 7.986,
+        clue: "amet eros suspendisse accumsan tortor quis turpis sed ante vivamus tortor duis mattis egestas metus aenean fermentum donec ut",
+        image:
+          "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+        comments: "I found a duck",
+      })
+    );
+  });
+});
