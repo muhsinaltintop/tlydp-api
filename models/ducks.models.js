@@ -1,8 +1,7 @@
 const db = require("../db/connection");
 
 exports.selectDucks = async (maker_id) => {
-  const queryStr = `
-  SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
+  const queryStr = `SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
   FROM ducks
   JOIN users AS makers ON ducks.maker_id = makers.user_id
   LEFT JOIN users AS finders ON ducks.finder_id = finders.user_id
@@ -16,8 +15,7 @@ exports.selectDucks = async (maker_id) => {
 };
 
 exports.selectFoundDucks = async (finder_id, maker_id) => {
-  let queryStr = `
-  SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
+  let queryStr = `SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
   FROM ducks
   JOIN users AS makers ON ducks.maker_id = makers.user_id
   JOIN users AS finders ON ducks.finder_id = finders.user_id `;
@@ -41,23 +39,23 @@ exports.selectFoundDucks = async (finder_id, maker_id) => {
 };
 
 exports.selectUnfoundDucks = async () => {
-  const { rows } = await db.query(`
-  SELECT ducks.duck_name, ducks.finder_id, ducks.location_placed_lat, ducks.location_placed_lng, ducks.clue, users.user_name AS maker_name
-  FROM ducks
-  JOIN users ON ducks.maker_id = users.user_id
-  WHERE finder_id IS NULL;`);
+  const { rows } = await db.query(
+    `SELECT ducks.duck_name, ducks.finder_id, ducks.location_placed_lat, ducks.location_placed_lng, ducks.clue, users.user_name AS maker_name
+    FROM ducks
+    JOIN users ON ducks.maker_id = users.user_id
+    WHERE finder_id IS NULL;`
+  );
 
   return rows;
 };
 
 exports.selectDuckById = async (id) => {
   const { rows } = await db.query(
-    `
-  SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
-  FROM ducks
-  JOIN users AS makers ON ducks.maker_id = makers.user_id
-  LEFT JOIN users AS finders ON ducks.finder_id = finders.user_id
-  WHERE duck_id = $1;`,
+    `SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
+    FROM ducks
+    JOIN users AS makers ON ducks.maker_id = makers.user_id
+    LEFT JOIN users AS finders ON ducks.finder_id = finders.user_id
+    WHERE duck_id = $1;`,
     [id]
   );
 
@@ -68,16 +66,14 @@ exports.updateDuckById = async (
   duck_id,
   { finder_id, location_found_lat, location_found_lng, image, comments }
 ) => {
-  const { rows } = await db.query(
-    `
-  UPDATE ducks
-  SET finder_id = $1,
-      location_found_lat = $2,
-      location_found_lng = $3,
-      image = $4,
-      comments = $5
-  WHERE duck_id = $6
-  RETURNING *;`,
+  await db.query(
+    `UPDATE ducks
+    SET finder_id = $1,
+        location_found_lat = $2,
+        location_found_lng = $3,
+        image = $4,
+        comments = $5
+    WHERE duck_id = $6;`,
     [
       finder_id,
       location_found_lat,
@@ -88,7 +84,9 @@ exports.updateDuckById = async (
     ]
   );
 
-  return rows[0];
+  const duck = await this.selectDuckById(duck_id);
+
+  return duck;
 };
 
 exports.insertDuck = async ({
@@ -99,11 +97,10 @@ exports.insertDuck = async ({
   clue,
 }) => {
   const { rows } = await db.query(
-    `
-  INSERT INTO ducks
-  (duck_name, maker_id, location_placed_lat, location_placed_lng, clue)
-  VALUES ($1, $2, $3, $4, $5)
-  RETURNING *;`,
+    `INSERT INTO ducks
+      (duck_name, maker_id, location_placed_lat, location_placed_lng, clue)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;`,
     [duck_name, maker_id, location_placed_lat, location_placed_lng, clue]
   );
 
