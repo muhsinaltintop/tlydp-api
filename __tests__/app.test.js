@@ -180,3 +180,33 @@ describe("PATCH /api/ducks/:duck_id", () => {
     );
   });
 });
+
+describe("POST /api/ducks", () => {
+  test("201: should return created duck", async () => {
+    const newDuck = {
+      duck_name: "Quacky",
+      maker_id: 2,
+      location_placed_lat: 53.488087,
+      location_placed_lng: -10.022186,
+      clue: "Find me ",
+    };
+
+    const {
+      body: { duck },
+    } = await request(app).post("/api/ducks").send(newDuck).expect(201);
+    expect(duck).toEqual(
+      expect.objectContaining({
+        duck_name: "Quacky",
+        maker_id: 2,
+        finder_id: null,
+        location_placed_lat: 53.488087,
+        location_placed_lng: -10.022186,
+        location_found_lat: null,
+        location_found_lng: null,
+        clue: "Find me ",
+        image: null,
+        comments: null,
+      })
+    );
+  });
+});
