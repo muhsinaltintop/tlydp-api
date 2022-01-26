@@ -124,6 +124,18 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
+  test('400: returns error message when passed invalid finder_id', async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?finder_id=invalid").expect(400);
+    expect(msg).toBe("Invalid user ID");
+  });
+  test('404: returns error message when passed valid but non-existent finder_id', async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?finder_id=123").expect(404);
+    expect(msg).toBe("user does not exist");
+  });
   test("200: returns array of only found ducks made by a user when passed a maker_id query", async () => {
     const {
       body: { ducks },
@@ -138,6 +150,18 @@ describe("GET /api/ducks/found", () => {
         })
       );
     });
+  });
+  test('400: returns error message when passed invalid maker_id', async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?maker_id=invalid").expect(400);
+    expect(msg).toBe("Invalid user ID");
+  });
+  test('404: returns error message when passed valid but non-existent maker_id', async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?maker_id=1653").expect(404);
+    expect(msg).toBe("user does not exist");
   });
 });
 
