@@ -3,6 +3,7 @@ const testData = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const request = require("supertest");
 const app = require("../app");
+const { expect } = require("@jest/globals");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -57,6 +58,18 @@ describe("GET /api/ducks", () => {
         })
       );
     });
+  });
+  test("400: returns error message when passed an invalid maker_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks?maker_id=invalid").expect(400);
+    expect(msg).toBe("Invalid Maker ID");
+  });
+  test('404: returns error message when passed valid but non-existent maker_id', async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks?maker_id=666").expect(404);
+    expect(msg).toBe("user does not exist");
   });
 });
 
