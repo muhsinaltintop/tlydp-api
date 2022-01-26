@@ -59,11 +59,21 @@ exports.getUnfoundDucks = async (req, res, next) => {
 };
 
 exports.getDuckById = async (req, res, next) => {
-  const { duck_id } = req.params;
+  try {
+    const { duck_id } = req.params;
 
-  const duck = await selectDuckById(duck_id);
+    if (isNaN(duck_id)) {
+      await Promise.reject({ status: 400, msg: "Invalid duck ID" });
+    }
 
-  res.status(200).send({ duck });
+    await checkExists("ducks", "duck_id", duck_id);
+
+    const duck = await selectDuckById(duck_id);
+
+    res.status(200).send({ duck });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.patchDuckById = async (req, res, next) => {
