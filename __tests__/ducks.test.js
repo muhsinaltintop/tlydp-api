@@ -210,6 +210,18 @@ describe("GET /api/ducks/:duck_id", () => {
       })
     );
   });
+  test('400: returns error message when passed invalid duck_id', async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/invalid").expect(400);
+    expect(msg).toBe("Invalid duck ID");
+  });
+  test('404: returns error message when passed valid but non-existent duck_id', async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/842").expect(404);
+    expect(msg).toBe("duck does not exist");
+  });
 });
 
 describe("PATCH /api/ducks/:duck_id", () => {
