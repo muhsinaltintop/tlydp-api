@@ -89,7 +89,7 @@ exports.updateDuckById = async (
   return duck;
 };
 
-exports.insertDuck = async ({
+exports.insertDuckByMakerId = async ({
   duck_name,
   maker_id,
   location_placed_lat,
