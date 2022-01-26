@@ -12,11 +12,12 @@ exports.getDucks = async (req, res, next) => {
   try {
     const { maker_id } = req.query;
 
-    if (isNaN(maker_id)) {
-      await Promise.reject({ status: 400, msg: "Invalid Maker ID" });
+    if (maker_id) {
+      if (isNaN(maker_id)) {
+        await Promise.reject({ status: 400, msg: "Invalid Maker ID" });
+      }
+      await checkExists("users", "user_id", maker_id);
     }
-
-    await checkExists("users", "user_id", maker_id);
 
     const ducks = await selectDucks(maker_id);
 
@@ -27,11 +28,24 @@ exports.getDucks = async (req, res, next) => {
 };
 
 exports.getFoundDucks = async (req, res, next) => {
-  const { finder_id, maker_id } = req.query;
+  try {
+    const { finder_id, maker_id } = req.query;
 
-  const ducks = await selectFoundDucks(finder_id, maker_id);
+    if (maker_id || finder_id) {
+      let query = maker_id ? maker_id : finder_id ? finder_id : null;
 
-  res.status(200).send({ ducks });
+      if (isNaN(query)) {
+        await Promise.reject({ status: 400, msg: "Invalid user ID" });
+      }
+      await checkExists("users", "user_id", query);
+    }
+
+    const ducks = await selectFoundDucks(finder_id, maker_id);
+
+    res.status(200).send({ ducks });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getUnfoundDucks = async (req, res, next) => {
