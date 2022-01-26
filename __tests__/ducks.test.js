@@ -65,7 +65,7 @@ describe("GET /api/ducks", () => {
     } = await request(app).get("/api/ducks?maker_id=invalid").expect(400);
     expect(msg).toBe("Invalid Maker ID");
   });
-  test('404: returns error message when passed valid but non-existent maker_id', async () => {
+  test("404: returns error message when passed valid but non-existent maker_id", async () => {
     const {
       body: { msg },
     } = await request(app).get("/api/ducks?maker_id=666").expect(404);
@@ -124,13 +124,15 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
-  test('400: returns error message when passed invalid finder_id', async () => {
+  test("400: returns error message when passed invalid finder_id", async () => {
     const {
       body: { msg },
-    } = await request(app).get("/api/ducks/found?finder_id=invalid").expect(400);
+    } = await request(app)
+      .get("/api/ducks/found?finder_id=invalid")
+      .expect(400);
     expect(msg).toBe("Invalid user ID");
   });
-  test('404: returns error message when passed valid but non-existent finder_id', async () => {
+  test("404: returns error message when passed valid but non-existent finder_id", async () => {
     const {
       body: { msg },
     } = await request(app).get("/api/ducks/found?finder_id=123").expect(404);
@@ -151,13 +153,13 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
-  test('400: returns error message when passed invalid maker_id', async () => {
+  test("400: returns error message when passed invalid maker_id", async () => {
     const {
       body: { msg },
     } = await request(app).get("/api/ducks/found?maker_id=invalid").expect(400);
     expect(msg).toBe("Invalid user ID");
   });
-  test('404: returns error message when passed valid but non-existent maker_id', async () => {
+  test("404: returns error message when passed valid but non-existent maker_id", async () => {
     const {
       body: { msg },
     } = await request(app).get("/api/ducks/found?maker_id=1653").expect(404);
@@ -210,13 +212,13 @@ describe("GET /api/ducks/:duck_id", () => {
       })
     );
   });
-  test('400: returns error message when passed invalid duck_id', async () => {
+  test("400: returns error message when passed invalid duck_id", async () => {
     const {
       body: { msg },
     } = await request(app).get("/api/ducks/invalid").expect(400);
     expect(msg).toBe("Invalid duck ID");
   });
-  test('404: returns error message when passed valid but non-existent duck_id', async () => {
+  test("404: returns error message when passed valid but non-existent duck_id", async () => {
     const {
       body: { msg },
     } = await request(app).get("/api/ducks/842").expect(404);
@@ -254,6 +256,57 @@ describe("PATCH /api/ducks/:duck_id", () => {
         comments: "I found a duck",
       })
     );
+  });
+  test("400: returns error message when passed invalid duck_id", async () => {
+    const foundDuck = {
+      finder_id: 3,
+      location_found_lat: 38.7894166,
+      location_found_lng: 7.986,
+      image:
+        "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+      comments: "I found a duck",
+    };
+    const {
+      body: { msg },
+    } = await request(app)
+      .patch("/api/ducks/invalid")
+      .send(foundDuck)
+      .expect(400);
+    expect(msg).toBe("Invalid duck ID");
+  });
+  test("404: returns error message when valid but non-existent duck_id", async () => {
+    const foundDuck = {
+      finder_id: 3,
+      location_found_lat: 38.7894166,
+      location_found_lng: 7.986,
+      image:
+        "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+      comments: "I found a duck",
+    };
+    const {
+      body: { msg },
+    } = await request(app)
+      .patch("/api/ducks/649")
+      .send(foundDuck)
+      .expect(404);
+    expect(msg).toBe("duck does not exist");
+  });
+  test("400: returns error message when passed invalid field type", async () => {
+    const foundDuck = {
+      finder_id: "boo",
+      location_found_lat: 38.7894166,
+      location_found_lng: 7.986,
+      image:
+        "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+      comments: "I found a duck",
+    };
+    const {
+      body: { msg },
+    } = await request(app)
+      .patch("/api/ducks/2")
+      .send(foundDuck)
+      .expect(400);
+    expect(msg).toBe("finder_id must be a number");
   });
 });
 
