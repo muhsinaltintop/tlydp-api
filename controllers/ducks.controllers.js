@@ -49,9 +49,13 @@ exports.getFoundDucks = async (req, res, next) => {
 };
 
 exports.getUnfoundDucks = async (req, res, next) => {
-  const ducks = await selectUnfoundDucks();
+  try {
+    const ducks = await selectUnfoundDucks();
 
-  res.status(200).send({ ducks });
+    res.status(200).send({ ducks });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getDuckById = async (req, res, next) => {
