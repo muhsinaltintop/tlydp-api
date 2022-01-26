@@ -63,7 +63,7 @@ describe("GET /api/ducks", () => {
     const {
       body: { msg },
     } = await request(app).get("/api/ducks?maker_id=invalid").expect(400);
-    expect(msg).toBe("Invalid Maker ID");
+    expect(msg).toBe("Invalid maker ID");
   });
   test("404: returns error message when passed valid but non-existent maker_id", async () => {
     const {
@@ -285,10 +285,7 @@ describe("PATCH /api/ducks/:duck_id", () => {
     };
     const {
       body: { msg },
-    } = await request(app)
-      .patch("/api/ducks/649")
-      .send(foundDuck)
-      .expect(404);
+    } = await request(app).patch("/api/ducks/649").send(foundDuck).expect(404);
     expect(msg).toBe("duck does not exist");
   });
   test("400: returns error message when passed invalid field type", async () => {
@@ -302,10 +299,7 @@ describe("PATCH /api/ducks/:duck_id", () => {
     };
     const {
       body: { msg },
-    } = await request(app)
-      .patch("/api/ducks/2")
-      .send(foundDuck)
-      .expect(400);
+    } = await request(app).patch("/api/ducks/2").send(foundDuck).expect(400);
     expect(msg).toBe("finder_id must be a number");
   });
 });
@@ -337,5 +331,47 @@ describe("POST /api/ducks", () => {
         comments: null,
       })
     );
+  });
+  test("400: returns error message when passed invalid field", async () => {
+    const newDuck = {
+      duck_name: "Quacky",
+      maker_id: 3,
+      location_placed_lat: "Up North",
+      location_placed_lng: -10.022186,
+      clue: "Find me",
+    };
+
+    const {
+      body: { msg },
+    } = await request(app).post("/api/ducks").send(newDuck).expect(400);
+    expect(msg).toBe("location_placed_lat must be a number")
+  });
+  test("400: returns error message when passed ", async () => {
+    const newDuck = {
+      duck_name: "Quacky",
+      maker_id: "Becca",
+      location_placed_lat: 53.488087,
+      location_placed_lng: -10.022186,
+      clue: "Find me",
+    };
+
+    const {
+      body: { msg },
+    } = await request(app).post("/api/ducks").send(newDuck).expect(400);
+    expect(msg).toBe("Invalid maker ID")
+  });
+  test("404: returns error message when passed valid but non-existent maker_id", async () => {
+    const newDuck = {
+      duck_name: "Quacky",
+      maker_id: 789,
+      location_placed_lat: 53.488087,
+      location_placed_lng: -10.022186,
+      clue: "Find me",
+    };
+
+    const {
+      body: { msg },
+    } = await request(app).post("/api/ducks").send(newDuck).expect(404);
+    expect(msg).toBe("user does not exist");
   });
 });
