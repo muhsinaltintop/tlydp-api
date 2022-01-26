@@ -6,7 +6,7 @@ const {
   updateDuckById,
   insertDuck,
 } = require("../models/ducks.models");
-const { checkExists } = require("../utils");
+const { checkExists, typeChecker } = require("../utils");
 
 exports.getDucks = async (req, res, next) => {
   try {
@@ -73,13 +73,49 @@ exports.getDuckById = async (req, res, next) => {
 };
 
 exports.patchDuckById = async (req, res, next) => {
-  const { duck_id } = req.params;
+  try {
+    const { duck_id } = req.params;
 
-  const body = req.body;
+    isNaN(duck_id)
+      ? await Promise.reject({ status: 400, msg: "Invalid duck ID" })
+      : await checkExists("ducks", "duck_id", duck_id);
 
-  const duck = await updateDuckById(duck_id, body);
+    const {
+      finder_id,
+      location_found_lat,
+      location_found_lng,
+      image,
+      comments,
+    } = req.body;
 
-  res.status(200).send({ duck });
+    const numberTypes = [finder_id, location_found_lat, location_found_lng];
+    const numberFields = [
+      "finder_id",
+      "location_found_lat",
+      "location_found_lng",
+    ];
+
+    const stringTypes = [image, comments];
+    const stringFields = ["image", "comments"];
+
+    if (numberTypes.some((item) => isNaN(item))) {
+      const field = typeChecker(numberTypes, numberFields, "number");
+
+      await Promise.reject({ status: 400, msg: `${field} must be a number` });
+    }
+
+    if (stringTypes.some((item) => !isNaN(item))) {
+      const field = typeChecker(stringTypes, stringFields, "string");
+
+      await Promise.reject({ status: 400, msg: `${field} must be a string` });
+    }
+
+    const duck = await updateDuckById(duck_id, req.body);
+
+    res.status(200).send({ duck });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.postDuck = async (req, res, next) => {
