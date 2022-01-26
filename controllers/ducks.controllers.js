@@ -6,13 +6,24 @@ const {
   updateDuckById,
   insertDuck,
 } = require("../models/ducks.models");
+const { checkExists } = require("../utils");
 
 exports.getDucks = async (req, res, next) => {
-  const { maker_id } = req.query;
+  try {
+    const { maker_id } = req.query;
 
-  const ducks = await selectDucks(maker_id);
+    if (isNaN(maker_id)) {
+      await Promise.reject({ status: 400, msg: "Invalid Maker ID" });
+    }
 
-  res.status(200).send({ ducks });
+    await checkExists("users", "user_id", maker_id);
+
+    const ducks = await selectDucks(maker_id);
+
+    res.status(200).send({ ducks });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getFoundDucks = async (req, res, next) => {
