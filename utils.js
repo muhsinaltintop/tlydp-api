@@ -24,5 +24,8 @@ exports.typeChecker = (typesArr, fieldsArr, type) => {
   const invalid = typesArr.findIndex((item) => typeof item !== type);
   const invalidFieldName = fieldsArr[invalid];
 
-  return invalidFieldName;
+  return Promise.reject({
+    status: 400,
+    msg: `${invalidFieldName} must be a ${type}`,
+  });
 };
