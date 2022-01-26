@@ -4,7 +4,7 @@ const {
   selectUnfoundDucks,
   selectDuckById,
   updateDuckById,
-  insertDuck,
+  insertDuckByMakerId,
 } = require("../models/ducks.models");
 const { checkExists, typeChecker } = require("../utils");
 
@@ -14,7 +14,7 @@ exports.getDucks = async (req, res, next) => {
 
     if (maker_id) {
       isNaN(maker_id)
-        ? await Promise.reject({ status: 400, msg: "Invalid Maker ID" })
+        ? await Promise.reject({ status: 400, msg: "Invalid maker ID" })
         : await checkExists("users", "user_id", maker_id);
     }
 
@@ -99,15 +99,11 @@ exports.patchDuckById = async (req, res, next) => {
     const stringFields = ["image", "comments"];
 
     if (numberTypes.some((item) => isNaN(item))) {
-      const field = typeChecker(numberTypes, numberFields, "number");
-
-      await Promise.reject({ status: 400, msg: `${field} must be a number` });
+      await typeChecker(numberTypes, numberFields, "number");
     }
 
     if (stringTypes.some((item) => !isNaN(item))) {
-      const field = typeChecker(stringTypes, stringFields, "string");
-
-      await Promise.reject({ status: 400, msg: `${field} must be a string` });
+      await typeChecker(stringTypes, stringFields, "string");
     }
 
     const duck = await updateDuckById(duck_id, req.body);
@@ -118,10 +114,38 @@ exports.patchDuckById = async (req, res, next) => {
   }
 };
 
-exports.postDuck = async (req, res, next) => {
-  const body = req.body;
+exports.postDuckByMakerId = async (req, res, next) => {
+  try {
+    const {
+      duck_name,
+      maker_id,
+      location_placed_lat,
+      location_placed_lng,
+      clue,
+    } = req.body;
 
-  const duck = await insertDuck(body);
+    isNaN(maker_id)
+      ? await Promise.reject({ status: 400, msg: "Invalid maker ID" })
+      : await checkExists("users", "user_id", maker_id);
 
-  res.status(201).send({ duck });
+    const numberTypes = [location_placed_lat, location_placed_lng];
+    const numberFields = ["location_placed_lat", "location_placed_lng"];
+
+    const stringTypes = [duck_name, clue];
+    const stringFields = ["duck_name", "clue"];
+
+    if (numberTypes.some((item) => isNaN(item))) {
+      await typeChecker(numberTypes, numberFields, "number");
+    }
+
+    if (stringTypes.some((item) => !isNaN(item))) {
+      await typeChecker(stringTypes, stringFields, "string");
+    }
+
+    const duck = await insertDuckByMakerId(req.body);
+
+    res.status(201).send({ duck });
+  } catch (err) {
+    next(err);
+  }
 };
