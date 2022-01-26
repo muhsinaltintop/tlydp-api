@@ -17,7 +17,7 @@
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
-    "test": "npm run setup-dbs && NODE_ENV=test jest",
+    "test": "npm run setup-dbs && NODE_ENV=test jest --config ./jest.config.js",
     "start": "node listen.js"
   },
   "repository": {
