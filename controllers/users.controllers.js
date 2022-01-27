@@ -49,9 +49,17 @@ exports.postExistingUser = async (req, res, next) => {
 };
 
 exports.getUser = async (req, res, next) => {
-  const { user_name } = req.params;
+  try {
+    const { user_name } = req.params;
 
-  const user = await selectUser(user_name);
+    !isNaN(user_name)
+      ? await Promise.reject({ status: 400, msg: "Invalid user_name" })
+      : await checkExists("users", "user_name", user_name);
 
-  res.status(200).send({ user });
+    const user = await selectUser(user_name);
+
+    res.status(200).send({ user });
+  } catch (err) {
+    next(err);
+  }
 };
