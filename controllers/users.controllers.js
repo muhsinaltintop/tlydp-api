@@ -1,4 +1,5 @@
 const { insertNewUser, selectUser } = require("../models/users.models");
+const { checkExists } = require("../utils");
 
 exports.postNewUser = async (req, res, next) => {
   const newUser = req.body;
@@ -9,11 +10,27 @@ exports.postNewUser = async (req, res, next) => {
 };
 
 exports.postExistingUser = async (req, res, next) => {
-  const { user_name, password } = req.body;
+  try {
+    const { user_name, password } = req.body;
 
-  const user = await selectUser(user_name, password);
+    if (!isNaN(user_name) || !isNaN(password)) {
+      let field = !isNaN(user_name)
+        ? "user_name"
+        : !isNaN(password)
+        ? "password"
+        : null;
 
-  res.status(200).send({ user });
+      await Promise.reject({ status: 400, msg: `${field} must be a string` });
+    }
+
+    await checkExists("users", "user_name", user_name);
+
+    const user = await selectUser(user_name, password);
+
+    res.status(200).send({ user });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getUser = async (req, res, next) => {
