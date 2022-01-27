@@ -1,12 +1,27 @@
 const { insertNewUser, selectUser } = require("../models/users.models");
-const { checkExists } = require("../utils");
+const { checkExists, checkUniqueUser, typeChecker } = require("../utils");
 
 exports.postNewUser = async (req, res, next) => {
-  const newUser = req.body;
+  try {
+    const { user_name, email } = req.body;
 
-  const user = await insertNewUser(newUser);
+    const stringTypes = Object.values(req.body);
+    const stringFields = Object.keys(req.body);
 
-  res.status(201).send({ user });
+    if (stringTypes.some((item) => !isNaN(item))) {
+      await typeChecker(stringTypes, stringFields, "string");
+    }
+
+    const checkUsername = checkUniqueUser("user_name", user_name);
+    const checkEmail = checkUniqueUser("email", email);
+    await Promise.all([checkUsername, checkEmail]);
+
+    const user = await insertNewUser(req.body);
+
+    res.status(201).send({ user });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.postExistingUser = async (req, res, next) => {
