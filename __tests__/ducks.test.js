@@ -3,6 +3,7 @@ const testData = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
 const request = require("supertest");
 const app = require("../app");
+const { expect } = require("@jest/globals");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -58,6 +59,18 @@ describe("GET /api/ducks", () => {
       );
     });
   });
+  test("400: returns error message when passed an invalid maker_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks?maker_id=invalid").expect(400);
+    expect(msg).toBe("Invalid maker ID");
+  });
+  test("404: returns error message when passed valid but non-existent maker_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks?maker_id=666").expect(404);
+    expect(msg).toBe("user does not exist");
+  });
 });
 
 describe("GET /api/ducks/found", () => {
@@ -111,6 +124,20 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
+  test("400: returns error message when passed invalid finder_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app)
+      .get("/api/ducks/found?finder_id=invalid")
+      .expect(400);
+    expect(msg).toBe("Invalid user ID");
+  });
+  test("404: returns error message when passed valid but non-existent finder_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?finder_id=123").expect(404);
+    expect(msg).toBe("user does not exist");
+  });
   test("200: returns array of only found ducks made by a user when passed a maker_id query", async () => {
     const {
       body: { ducks },
@@ -125,6 +152,18 @@ describe("GET /api/ducks/found", () => {
         })
       );
     });
+  });
+  test("400: returns error message when passed invalid maker_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?maker_id=invalid").expect(400);
+    expect(msg).toBe("Invalid user ID");
+  });
+  test("404: returns error message when passed valid but non-existent maker_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?maker_id=1653").expect(404);
+    expect(msg).toBe("user does not exist");
   });
 });
 
@@ -173,6 +212,18 @@ describe("GET /api/ducks/:duck_id", () => {
       })
     );
   });
+  test("400: returns error message when passed invalid duck_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/invalid").expect(400);
+    expect(msg).toBe("Invalid duck ID");
+  });
+  test("404: returns error message when passed valid but non-existent duck_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/842").expect(404);
+    expect(msg).toBe("duck does not exist");
+  });
 });
 
 describe("PATCH /api/ducks/:duck_id", () => {
@@ -206,6 +257,51 @@ describe("PATCH /api/ducks/:duck_id", () => {
       })
     );
   });
+  test("400: returns error message when passed invalid duck_id", async () => {
+    const foundDuck = {
+      finder_id: 3,
+      location_found_lat: 38.7894166,
+      location_found_lng: 7.986,
+      image:
+        "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+      comments: "I found a duck",
+    };
+    const {
+      body: { msg },
+    } = await request(app)
+      .patch("/api/ducks/invalid")
+      .send(foundDuck)
+      .expect(400);
+    expect(msg).toBe("Invalid duck ID");
+  });
+  test("404: returns error message when valid but non-existent duck_id", async () => {
+    const foundDuck = {
+      finder_id: 3,
+      location_found_lat: 38.7894166,
+      location_found_lng: 7.986,
+      image:
+        "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+      comments: "I found a duck",
+    };
+    const {
+      body: { msg },
+    } = await request(app).patch("/api/ducks/649").send(foundDuck).expect(404);
+    expect(msg).toBe("duck does not exist");
+  });
+  test("400: returns error message when passed invalid field type", async () => {
+    const foundDuck = {
+      finder_id: "boo",
+      location_found_lat: 38.7894166,
+      location_found_lng: 7.986,
+      image:
+        "https://www.shutterstock.com/image-vector/yellow-duck-toy-inflatable-rubber-vector-1677879052",
+      comments: "I found a duck",
+    };
+    const {
+      body: { msg },
+    } = await request(app).patch("/api/ducks/2").send(foundDuck).expect(400);
+    expect(msg).toBe("finder_id must be a number");
+  });
 });
 
 describe("POST /api/ducks", () => {
@@ -235,5 +331,47 @@ describe("POST /api/ducks", () => {
         comments: null,
       })
     );
+  });
+  test("400: returns error message when passed invalid field", async () => {
+    const newDuck = {
+      duck_name: "Quacky",
+      maker_id: 3,
+      location_placed_lat: "Up North",
+      location_placed_lng: -10.022186,
+      clue: "Find me",
+    };
+
+    const {
+      body: { msg },
+    } = await request(app).post("/api/ducks").send(newDuck).expect(400);
+    expect(msg).toBe("location_placed_lat must be a number")
+  });
+  test("400: returns error message when passed ", async () => {
+    const newDuck = {
+      duck_name: "Quacky",
+      maker_id: "Becca",
+      location_placed_lat: 53.488087,
+      location_placed_lng: -10.022186,
+      clue: "Find me",
+    };
+
+    const {
+      body: { msg },
+    } = await request(app).post("/api/ducks").send(newDuck).expect(400);
+    expect(msg).toBe("Invalid maker ID")
+  });
+  test("404: returns error message when passed valid but non-existent maker_id", async () => {
+    const newDuck = {
+      duck_name: "Quacky",
+      maker_id: 789,
+      location_placed_lat: 53.488087,
+      location_placed_lng: -10.022186,
+      clue: "Find me",
+    };
+
+    const {
+      body: { msg },
+    } = await request(app).post("/api/ducks").send(newDuck).expect(404);
+    expect(msg).toBe("user does not exist");
   });
 });
