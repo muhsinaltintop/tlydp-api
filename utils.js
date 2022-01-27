@@ -29,3 +29,19 @@ exports.typeChecker = (typesArr, fieldsArr, type) => {
     msg: `${invalidFieldName} must be a ${type}`,
   });
 };
+
+exports.checkUniqueUser = async (column, value) => {
+  const queryStr = format(
+    `SELECT * FROM users
+    WHERE %I = $1;`,
+    column
+  );
+  const { rows } = await db.query(queryStr, [value]);
+
+  if (rows[0]) {
+    return Promise.reject({
+      status: 400,
+      msg: `An account with that ${column} already exists`,
+    });
+  }
+};
