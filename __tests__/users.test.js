@@ -127,7 +127,7 @@ describe("user endpoints", () => {
         .expect(400);
       expect(msg).toBe("Incorrect password");
     });
-    test("400: returns error message when passed incorrect field types", async () => {
+    test("400: returns error message when passed incorrect field type for password", async () => {
       const existingUser = {
         user_name: "bmcgenis1",
         password: 45644,
@@ -139,6 +139,19 @@ describe("user endpoints", () => {
         .send(existingUser)
         .expect(400);
       expect(msg).toBe("password must be a string");
+    });
+    test("400: returns error message when passed incorrect field type for user_name", async () => {
+      const existingUser = {
+        user_name: 45644,
+        password: "password",
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post("/api/users/login")
+        .send(existingUser)
+        .expect(400);
+      expect(msg).toBe("user_name must be a string");
     });
     test("404: returns error message when passed non-existent user", async () => {
       const existingUser = {
