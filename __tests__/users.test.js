@@ -170,5 +170,17 @@ describe("user endpoints", () => {
           "https://robohash.org/sedducimuset.png?size=50x50&set=set1",
       });
     });
+    test("400: returns error message when passed invalid username", async () => {
+      const {
+        body: { msg },
+      } = await request(app).get("/api/users/888").expect(400);
+      expect(msg).toBe("Invalid user_name");
+    });
+    test("404: returns error message when passed valid but non-existent username", async () => {
+      const {
+        body: { msg },
+      } = await request(app).get("/api/users/valid").expect(404);
+      expect(msg).toBe("user does not exist");
+    });
   });
 });
