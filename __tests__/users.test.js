@@ -60,6 +60,45 @@ describe("user endpoints", () => {
           "https://robohash.org/estculpanulla.png?size=50x50&set=set1",
       });
     });
+    test("400: returns error message when passed incorrect password", async () => {
+      const existingUser = {
+        user_name: "bmcgenis1",
+        password: "incorrect",
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post("/api/users/login")
+        .send(existingUser)
+        .expect(400);
+      expect(msg).toBe("Incorrect password");
+    });
+    test("400: returns error message when passed incorrect field types", async () => {
+      const existingUser = {
+        user_name: "bmcgenis1",
+        password: 45644,
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post("/api/users/login")
+        .send(existingUser)
+        .expect(400);
+      expect(msg).toBe("password must be a string");
+    });
+    test('404: returns error message when passed non-existent user', async () => {
+      const existingUser = {
+        user_name: "Duckyboi",
+        password: "password",
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post("/api/users/login")
+        .send(existingUser)
+        .expect(404);
+      expect(msg).toBe("user does not exist");
+    });
   });
   describe("GET /api/users/:user_name", () => {
     test("200: returns user object", async () => {
