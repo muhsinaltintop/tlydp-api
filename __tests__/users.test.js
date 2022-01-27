@@ -36,6 +36,60 @@ describe("user endpoints", () => {
           "https://robohash.org/autetdolorum.png?size=50x50&set=set1",
       });
     });
+    test("400: returns error message when passed user_name that already exists", async () => {
+      const newUser = {
+        user_name: "jbuggy2",
+        first_name: "Doug",
+        last_name: "Webster",
+        password: "Iloveducks22",
+        email: "newuser@gmail.com",
+        profile_pic:
+          "https://robohash.org/autetdolorum.png?size=50x50&set=set1",
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post("/api/users/register")
+        .send(newUser)
+        .expect(400);
+      expect(msg).toBe("An account with that user_name already exists");
+    });
+    test("400: returns error message when passed email that already exists", async () => {
+      const newUser = {
+        user_name: "newUser",
+        first_name: "Doug",
+        last_name: "Webster",
+        password: "Iloveducks22",
+        email: "bmcgenis1@hibu.com",
+        profile_pic:
+          "https://robohash.org/autetdolorum.png?size=50x50&set=set1",
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post("/api/users/register")
+        .send(newUser)
+        .expect(400);
+      expect(msg).toBe("An account with that email already exists");
+    });
+    test("400: returns error message when passed incorrect field type", async () => {
+      const newUser = {
+        user_name: 666,
+        first_name: "Doug",
+        last_name: "Webster",
+        password: "Iloveducks22",
+        email: "beeboop@gmail.com",
+        profile_pic:
+          "https://robohash.org/autetdolorum.png?size=50x50&set=set1",
+      };
+      const {
+        body: { msg },
+      } = await request(app)
+        .post("/api/users/register")
+        .send(newUser)
+        .expect(400);
+      expect(msg).toBe("user_name must be a string");
+    });
   });
   describe("POST /api/users/login", () => {
     test("200: returns user object when passed correct password", async () => {
@@ -86,7 +140,7 @@ describe("user endpoints", () => {
         .expect(400);
       expect(msg).toBe("password must be a string");
     });
-    test('404: returns error message when passed non-existent user', async () => {
+    test("404: returns error message when passed non-existent user", async () => {
       const existingUser = {
         user_name: "Duckyboi",
         password: "password",
