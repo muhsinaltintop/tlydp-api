@@ -165,59 +165,6 @@ describe("GET /api/ducks/found", () => {
     } = await request(app).get("/api/ducks/found?maker_id=1653").expect(404);
     expect(msg).toBe("user does not exist");
   });
-  test("200: returns ducks found only at the location passed by the location queries", async () => {
-    const {
-      body: { ducks },
-    } = await request(app)
-      .get(
-        "/api/ducks/found?location_found_lat=-7.280135&&location_found_lng=112.6347636"
-      )
-      .expect(200);
-    ducks.forEach((duck) => {
-      expect(duck).toEqual(
-        expect.objectContaining({
-          location_found_lat: -7.280135,
-          location_found_lng: 112.6347636,
-        })
-      );
-    });
-  });
-  test("400: returns error message when only passed location latitude query", async () => {
-    const {
-      body: { msg },
-    } = await request(app)
-      .get("/api/ducks/found?location_found_lat=-7.280135")
-      .expect(400);
-    expect(msg).toBe("Both latitude and longitude coordinates required");
-  });
-  test("400: returns error message when only passed location longitude query", async () => {
-    const {
-      body: { msg },
-    } = await request(app)
-      .get("/api/ducks/found?location_found_lng=112.6347636")
-      .expect(400);
-    expect(msg).toBe("Both latitude and longitude coordinates required");
-  });
-  test("400: returns error message when passed a string type latitude query", async () => {
-    const {
-      body: { msg },
-    } = await request(app)
-      .get(
-        "/api/ducks/found?location_found_lat=gowest&&location_found_lng=112.6347636"
-      )
-      .expect(400);
-    expect(msg).toBe("Coordinates must be numbers");
-  });
-  test("400: returns error message when passed a string type longitude query", async () => {
-    const {
-      body: { msg },
-    } = await request(app)
-      .get(
-        "/api/ducks/found?location_found_lat=-7.280135&&location_found_lng=upnorth"
-      )
-      .expect(400);
-    expect(msg).toBe("Coordinates must be numbers");
-  });
 });
 
 describe("GET /api/ducks/unfound", () => {

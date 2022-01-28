@@ -35,13 +35,7 @@ exports.selectFoundDucks = async (
     AND maker_id = $1;`;
     queryValues.push(maker_id);
   } else {
-    queryStr += `WHERE finder_id IS NOT NULL`;
-  }
-
-  if (location_found_lat) {
-    queryStr += ` AND location_found_lat = $1
-    AND location_found_lng = $2;`;
-    queryValues.push(location_found_lat, location_found_lng);
+    queryStr += `WHERE finder_id IS NOT NULL;`;
   }
 
   const { rows } = await db.query(queryStr, queryValues);

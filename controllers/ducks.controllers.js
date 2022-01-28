@@ -28,8 +28,7 @@ exports.getDucks = async (req, res, next) => {
 
 exports.getFoundDucks = async (req, res, next) => {
   try {
-    const { finder_id, maker_id, location_found_lat, location_found_lng } =
-      req.query;
+    const { finder_id, maker_id } = req.query;
 
     if (maker_id || finder_id) {
       let query = maker_id ? maker_id : finder_id ? finder_id : null;
@@ -39,16 +38,7 @@ exports.getFoundDucks = async (req, res, next) => {
         : await checkExists("users", "user_id", query);
     }
 
-    if (location_found_lat || location_found_lng) {
-      await checkCoordinates(location_found_lat, location_found_lng);
-    }
-
-    const ducks = await selectFoundDucks(
-      finder_id,
-      maker_id,
-      location_found_lat,
-      location_found_lng
-    );
+    const ducks = await selectFoundDucks(finder_id, maker_id);
 
     res.status(200).send({ ducks });
   } catch (err) {
