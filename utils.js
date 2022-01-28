@@ -45,3 +45,18 @@ exports.checkUniqueUser = async (column, value) => {
     });
   }
 };
+
+exports.checkCoordinates = (latitude, longitude) => {
+  if ((latitude && !longitude) || (longitude && !latitude)) {
+    return Promise.reject({
+      status: 400,
+      msg: "Both latitude and longitude coordinates required",
+    });
+  }
+  if (isNaN(latitude) || isNaN(longitude)) {
+    return Promise.reject({
+      status: 400,
+      msg: "Coordinates must be numbers",
+    });
+  }
+};

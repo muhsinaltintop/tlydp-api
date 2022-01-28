@@ -6,7 +6,7 @@ const {
   updateDuckById,
   insertDuckByMakerId,
 } = require("../models/ducks.models");
-const { checkExists, typeChecker } = require("../utils");
+const { checkExists, typeChecker, checkCoordinates } = require("../utils");
 
 exports.getDucks = async (req, res, next) => {
   try {
@@ -48,7 +48,13 @@ exports.getFoundDucks = async (req, res, next) => {
 
 exports.getUnfoundDucks = async (req, res, next) => {
   try {
-    const ducks = await selectUnfoundDucks();
+    const { location_placed_lat, location_placed_lng } = req.query;
+
+    if (location_placed_lat || location_placed_lng) {
+      await checkCoordinates(location_placed_lat, location_placed_lng);
+    }
+
+    const ducks = await selectUnfoundDucks(req.query);
 
     res.status(200).send({ ducks });
   } catch (err) {
