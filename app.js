@@ -1,6 +1,7 @@
 const express = require("express");
 const { handleCustomErrors, handleServerErrors } = require("./errors/errors");
 const apiRouter = require("./routes/api.router");
+const cors = require("cors");
 
 const app = express();
 
