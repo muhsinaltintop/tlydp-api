@@ -14,12 +14,7 @@ exports.selectDucks = async (maker_id) => {
   return rows;
 };
 
-exports.selectFoundDucks = async (
-  finder_id,
-  maker_id,
-  location_found_lat,
-  location_found_lng
-) => {
+exports.selectFoundDucks = async (finder_id, maker_id) => {
   let queryStr = `SELECT ducks.*, makers.user_name AS maker_name, finders.user_name AS finder_name
   FROM ducks
   JOIN users AS makers ON ducks.maker_id = makers.user_id
@@ -47,7 +42,7 @@ exports.selectUnfoundDucks = async ({
   location_placed_lat,
   location_placed_lng,
 }) => {
-  const queryStr = `SELECT ducks.duck_name, ducks.finder_id, ducks.location_placed_lat, ducks.location_placed_lng, ducks.clue, users.user_name AS maker_name
+  const queryStr = `SELECT ducks.duck_id, ducks.duck_name, ducks.finder_id, ducks.location_placed_lat, ducks.location_placed_lng, ducks.clue, users.user_name AS maker_name
   FROM ducks
   JOIN users ON ducks.maker_id = users.user_id
   WHERE finder_id IS NULL

@@ -176,6 +176,7 @@ describe("GET /api/ducks/unfound", () => {
     ducks.forEach((duck) => {
       expect(duck).toEqual(
         expect.objectContaining({
+          duck_id: expect.any(Number),
           duck_name: expect.any(String),
           finder_id: null,
           location_placed_lat: expect.any(Number),
