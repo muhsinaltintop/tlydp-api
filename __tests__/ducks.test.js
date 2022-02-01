@@ -178,10 +178,15 @@ describe("GET /api/ducks/unfound", () => {
         expect.objectContaining({
           duck_id: expect.any(Number),
           duck_name: expect.any(String),
+          maker_id: expect.any(Number),
           finder_id: null,
           location_placed_lat: expect.any(Number),
           location_placed_lng: expect.any(Number),
+          location_found_lat: null,
+          location_found_lng: null,
           clue: expect.any(String),
+          comments: null,
+          finder_name: null,
           maker_name: expect.any(String),
         })
       );
