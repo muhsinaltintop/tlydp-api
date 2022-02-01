@@ -53,10 +53,10 @@ exports.checkCoordinates = (latitude, longitude) => {
       msg: "Both latitude and longitude coordinates required",
     });
   }
-  if (isNaN(latitude) || isNaN(longitude)) {
-    return Promise.reject({
-      status: 400,
-      msg: "Coordinates must be numbers",
-    });
-  }
+  // if (isNaN(latitude) || isNaN(longitude)) {
+  //   return Promise.reject({
+  //     status: 400,
+  //     msg: "Coordinates must be numbers",
+  //   });
+  // }
 };
