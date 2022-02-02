@@ -59,12 +59,12 @@ describe("GET /api/ducks", () => {
       );
     });
   });
-  // test("400: returns error message when passed an invalid maker_id", async () => {
-  //   const {
-  //     body: { msg },
-  //   } = await request(app).get("/api/ducks?maker_id=invalid").expect(400);
-  //   expect(msg).toBe("Invalid maker ID");
-  // });
+  test("400: returns error message when passed an invalid maker_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks?maker_id=invalid").expect(400);
+    expect(msg).toBe("Invalid maker ID");
+  });
   test("404: returns error message when passed valid but non-existent maker_id", async () => {
     const {
       body: { msg },
@@ -124,14 +124,14 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
-  // test("400: returns error message when passed invalid finder_id", async () => {
-  //   const {
-  //     body: { msg },
-  //   } = await request(app)
-  //     .get("/api/ducks/found?finder_id=invalid")
-  //     .expect(400);
-  //   expect(msg).toBe("Invalid user ID");
-  // });
+  test("400: returns error message when passed invalid finder_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app)
+      .get("/api/ducks/found?finder_id=invalid")
+      .expect(400);
+    expect(msg).toBe("Invalid user ID");
+  });
   test("404: returns error message when passed valid but non-existent finder_id", async () => {
     const {
       body: { msg },
@@ -153,12 +153,12 @@ describe("GET /api/ducks/found", () => {
       );
     });
   });
-  // test("400: returns error message when passed invalid maker_id", async () => {
-  //   const {
-  //     body: { msg },
-  //   } = await request(app).get("/api/ducks/found?maker_id=invalid").expect(400);
-  //   expect(msg).toBe("Invalid user ID");
-  // });
+  test("400: returns error message when passed invalid maker_id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/ducks/found?maker_id=invalid").expect(400);
+    expect(msg).toBe("Invalid user ID");
+  });
   test("404: returns error message when passed valid but non-existent maker_id", async () => {
     const {
       body: { msg },
@@ -221,26 +221,26 @@ describe("GET /api/ducks/unfound", () => {
       .expect(400);
     expect(msg).toBe("Both latitude and longitude coordinates required");
   });
-  // test("400: returns error message when passed a string type latitude query", async () => {
-  //   const {
-  //     body: { msg },
-  //   } = await request(app)
-  //     .get(
-  //       "/api/ducks/unfound?location_placed_lat=gowest&&location_placed_lng=-10.022186"
-  //     )
-  //     .expect(400);
-  //   expect(msg).toBe("Coordinates must be numbers");
-  // });
-  // test("400: returns error message when passed a string type longitude query", async () => {
-  //   const {
-  //     body: { msg },
-  //   } = await request(app)
-  //     .get(
-  //       "/api/ducks/unfound?location_placed_lat=53.488087&&location_placed_lng=upnorth"
-  //     )
-  //     .expect(400);
-  //   expect(msg).toBe("Coordinates must be numbers");
-  // });
+  test("400: returns error message when passed a string type latitude query", async () => {
+    const {
+      body: { msg },
+    } = await request(app)
+      .get(
+        "/api/ducks/unfound?location_placed_lat=gowest&&location_placed_lng=-10.022186"
+      )
+      .expect(400);
+    expect(msg).toBe("Coordinates must be numbers");
+  });
+  test("400: returns error message when passed a string type longitude query", async () => {
+    const {
+      body: { msg },
+    } = await request(app)
+      .get(
+        "/api/ducks/unfound?location_placed_lat=53.488087&&location_placed_lng=upnorth"
+      )
+      .expect(400);
+    expect(msg).toBe("Coordinates must be numbers");
+  });
 });
 
 describe("GET /api/ducks/:duck_id", () => {
