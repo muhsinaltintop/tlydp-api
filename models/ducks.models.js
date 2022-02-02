@@ -118,3 +118,37 @@ exports.insertDuckByMakerId = async ({
 
   return rows[0];
 };
+
+exports.updateDuckByName = async ({
+  duck_name,
+  finder_id,
+  location_found_lat,
+  location_found_lng,
+  image,
+  comments,
+}) => {
+  const { rows } = await db.query(
+    `UPDATE ducks
+    SET finder_id = $1,
+        location_found_lat = $2,
+        location_found_lng = $3,
+        image = $4,
+        comments = $5
+    WHERE duck_name = $6
+    RETURNING *;`,
+    [
+      finder_id,
+      location_found_lat,
+      location_found_lng,
+      image,
+      comments,
+      duck_name,
+    ]
+  );
+
+  const duck_id = rows[0].duck_id;
+
+  const duck = await this.selectDuckById(duck_id);
+
+  return duck;
+};

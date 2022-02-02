@@ -5,6 +5,7 @@ const {
   selectDuckById,
   updateDuckById,
   insertDuckByMakerId,
+  updateDuckByName,
 } = require("../models/ducks.models");
 const { checkExists, typeChecker, checkCoordinates } = require("../utils");
 
@@ -13,10 +14,9 @@ exports.getDucks = async (req, res, next) => {
     const { maker_id } = req.query;
 
     if (maker_id) {
-      await checkExists("users", "user_id", maker_id);
-      // isNaN(maker_id)
-      //   ? await Promise.reject({ status: 400, msg: "Invalid maker ID" })
-      //   : await checkExists("users", "user_id", maker_id);
+      isNaN(maker_id)
+        ? await Promise.reject({ status: 400, msg: "Invalid maker ID" })
+        : await checkExists("users", "user_id", maker_id);
     }
 
     const ducks = await selectDucks(maker_id);
@@ -34,11 +34,9 @@ exports.getFoundDucks = async (req, res, next) => {
     if (maker_id || finder_id) {
       let query = maker_id ? maker_id : finder_id ? finder_id : null;
 
-      await checkExists("users", "user_id", query);
-
-      // isNaN(query)
-      //   ? await Promise.reject({ status: 400, msg: "Invalid user ID" })
-      //   : await checkExists("users", "user_id", query);
+      isNaN(query)
+        ? await Promise.reject({ status: 400, msg: "Invalid user ID" })
+        : await checkExists("users", "user_id", query);
     }
 
     const ducks = await selectFoundDucks(finder_id, maker_id);
@@ -154,6 +152,44 @@ exports.postDuckByMakerId = async (req, res, next) => {
     const duck = await insertDuckByMakerId(req.body);
 
     res.status(201).send({ duck });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.patchDuckByName = async (req, res, next) => {
+  try {
+    const {
+      duck_name,
+      finder_id,
+      location_found_lat,
+      location_found_lng,
+      image,
+      comments,
+    } = req.body;
+
+    await checkExists("ducks", "duck_name", duck_name);
+
+    const numberTypes = [finder_id, location_found_lat, location_found_lng];
+    const numberFields = [
+      "finder_id",
+      "location_found_lat",
+      "location_found_lng",
+    ];
+
+    const stringTypes = [image, comments];
+    const stringFields = ["image", "comments"];
+
+    if (numberTypes.some((item) => isNaN(item))) {
+      await typeChecker(numberTypes, numberFields, "number");
+    }
+
+    if (stringTypes.some((item) => !isNaN(item))) {
+      await typeChecker(stringTypes, stringFields, "string");
+    }
+
+    const duck = await updateDuckByName(req.body);
+    res.status(200).send({ duck });
   } catch (err) {
     next(err);
   }
