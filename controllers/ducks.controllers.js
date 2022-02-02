@@ -5,6 +5,7 @@ const {
   selectDuckById,
   updateDuckById,
   insertDuckByMakerId,
+  updateDuckByName,
 } = require("../models/ducks.models");
 const { checkExists, typeChecker, checkCoordinates } = require("../utils");
 
@@ -151,6 +152,44 @@ exports.postDuckByMakerId = async (req, res, next) => {
     const duck = await insertDuckByMakerId(req.body);
 
     res.status(201).send({ duck });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.patchDuckByName = async (req, res, next) => {
+  try {
+    const {
+      duck_name,
+      finder_id,
+      location_found_lat,
+      location_found_lng,
+      image,
+      comments,
+    } = req.body;
+
+    await checkExists("ducks", "duck_name", duck_name);
+
+    const numberTypes = [finder_id, location_found_lat, location_found_lng];
+    const numberFields = [
+      "finder_id",
+      "location_found_lat",
+      "location_found_lng",
+    ];
+
+    const stringTypes = [image, comments];
+    const stringFields = ["image", "comments"];
+
+    if (numberTypes.some((item) => isNaN(item))) {
+      await typeChecker(numberTypes, numberFields, "number");
+    }
+
+    if (stringTypes.some((item) => !isNaN(item))) {
+      await typeChecker(stringTypes, stringFields, "string");
+    }
+
+    const duck = await updateDuckByName(req.body);
+    res.status(200).send({ duck });
   } catch (err) {
     next(err);
   }

@@ -430,3 +430,35 @@ describe("POST /api/ducks", () => {
     expect(msg).toBe("user does not exist");
   });
 });
+
+describe("PATCH /api/ducks/unfound", () => {
+  test("200: returns updated duck object", async () => {
+    const updatedDuck = {
+      duck_name: "Kristan",
+      finder_id: 5,
+      location_found_lat: 53.488087,
+      location_found_lng: -10.022186,
+      image: "http://dummyimage.com/112x100.png/cc0000/ffffff",
+      comments: "I found a duck",
+    };
+    const {
+      body: { duck },
+    } = await request(app)
+      .patch("/api/ducks/unfound")
+      .send(updatedDuck)
+      .expect(200);
+    expect(duck).toEqual(
+      expect.objectContaining({
+        duck_id: 5,
+        maker_id: 2,
+        maker_name: "bmcgenis1",
+        finder_id: 5,
+        finder_name: "aeastridge4",
+        location_found_lat: 53.488087,
+        location_found_lng: -10.022186,
+        image: "http://dummyimage.com/112x100.png/cc0000/ffffff",
+        comments: "I found a duck",
+      })
+    );
+  });
+});
