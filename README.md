@@ -2,7 +2,7 @@
   
   
   <b>Hosted version:</b> https://tlydp.herokuapp.com/api <br >
-  <b>Frontend repository of the project:</b> https://github.com/aakirahin/encee-nuz
+  <b>Frontend repository of the project:</b> https://github.com/aakirahin/encee-nuz <br >
   <b>Presentation of the Project:</b> https://youtu.be/NuYAaqwzwyE?t=19646
 
 
@@ -13,13 +13,13 @@ The Little Yellow Duck Project is
 
 Express server interacts with a PSQL database for the function of the TLYDP app which has following end points:
 
-"GET /api": {},
-"GET /api/ducks": {},
-"GET /api/ducks/:duck_id": {},
-"GET /api/ducks/found": {},
-"GET /api/ducks/unfound": {},
-"PATCH /api/ducks/:duck_id": {},
-"POST /api/ducks/": {}
+"GET /api": {}, <br >
+"GET /api/ducks": {}, <br >
+"GET /api/ducks/:duck_id": {}, <br >
+"GET /api/ducks/found": {}, <br >
+"GET /api/ducks/unfound": {}, <br >
+"PATCH /api/ducks/:duck_id": {}, <br >
+"POST /api/ducks/": {} <br >
 
 Please check the details of endpoints here: https://tlydp.herokuapp.com/api
 
