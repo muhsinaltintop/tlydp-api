@@ -1,18 +1,36 @@
-<h1>The Little Yellow Duck Project</h1>
+<h1>The Little Yellow Duck Project (Backend)</h1>
   
   
   <b>Hosted version:</b> https://tlydp.herokuapp.com/api <br >
   <b>Frontend repository of the project:</b> https://github.com/aakirahin/encee-nuz
+  <b>Presentation of the Project:</b> https://youtu.be/NuYAaqwzwyE?t=19646
 
 
 <h2>Summary</h2>
+The Little Yellow Duck Project is 
 
-Express server interacts with a PSQL database for the function of the TLYDP app.
 
-<b>Minimum requirements:</b> <br >
-Node: v17.1.0 <br >
-PostgreSQL: 12.9 <br >
 
+Express server interacts with a PSQL database for the function of the TLYDP app which has following end points:
+
+"GET /api": {},
+"GET /api/ducks": {},
+"GET /api/ducks/:duck_id": {},
+"GET /api/ducks/found": {},
+"GET /api/ducks/unfound": {},
+"PATCH /api/ducks/:duck_id": {},
+"POST /api/ducks/": {}
+
+Please check the details of endpoints here: https://tlydp.herokuapp.com/api
+
+<h2>How to Install Locally:</h2> 
+If you would like to work on project on your own. You can fork the project to your github account and then clone it to your local machine via Git.
+<br>
+
+<h3>Minimum requirements:</h3>
+<ul>
+<li>Node: v17.1.0 </li>
+<li>PostgreSQL: 12.9 </li>
 
 <h3>Dependencies:</h3>
 <ul>
@@ -23,6 +41,12 @@ PostgreSQL: 12.9 <br >
   <li>pg: 8.7.1</li>
   <li>pg-format: 1.0.4</li>
 </ul>
+<br>
+<h3>Dev Dependencies:</h3>
+<ul>
+  <li>jest: 27.4.7</li>
+  <li>supertest: 6.2.2</li>
+  </ul>
 
 
 
