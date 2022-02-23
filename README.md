@@ -2,7 +2,7 @@
   
   
   <b>Hosted version:</b> https://tlydp.herokuapp.com/api <br >
-  <b>Frontend repository of the project:</b> https://github.com/aakirahin/encee-nuz <br >
+  <b>Frontend repository of the project:</b> https://github.com/muhsinaltintop/tlydp <br >
   <b>Presentation of the Project:</b> https://youtu.be/NuYAaqwzwyE?t=19646
 
 
